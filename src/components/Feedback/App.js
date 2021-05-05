@@ -1,8 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Section from './SectionTitle';
 import FeedbackOptions from './FeedbackOptions';
 import Notification from './Notofication';
 import Statistics from './Statistics';
+
 
 const { Component } = require("react");
 
@@ -14,6 +16,15 @@ class App extends Component {
     total: 0,
     positivePercentage: 0,
     statisticsMarkup: false,
+  }
+
+  static propTypes = {
+    good: PropTypes.number,
+    neutral: PropTypes.number,
+    bad: PropTypes.number,
+    total: PropTypes.number,
+    positivePercentage: PropTypes.number,
+    statisticsMarkup: PropTypes.bool.isRequired,
   }
 
   state = {
