@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Section from './SectionTitle';
 import FeedbackOptions from './FeedbackOptions';
 import Notification from './Notofication';
@@ -9,53 +8,36 @@ import Statistics from './Statistics';
 const { Component } = require("react");
 
 class App extends Component {
-  static defaultProps = {
+  // static defaultProps = {
+  //   good: 0,
+  //   neutral: 0,
+  //   bad: 0,
+  //   total: 0,
+  //   positivePercentage: 0,
+  //   statisticsMarkup: false,
+  // }
+
+  state = {
     good: 0,
     neutral: 0,
     bad: 0,
-    total: 0,
-    positivePercentage: 0,
-    statisticsMarkup: false,
+    statisticsMarkup: false
   }
 
-  static propTypes = {
-    good: PropTypes.number,
-    neutral: PropTypes.number,
-    bad: PropTypes.number,
-    total: PropTypes.number,
-    positivePercentage: PropTypes.number,
-    statisticsMarkup: PropTypes.bool.isRequired,
-  }
-
-  state = {
-    good: this.props.good,
-    neutral: this.props.neutral,
-    bad: this.props.bad,
-    total: this.props.total,
-    positivePercentage: this.props.positivePercentage,
-    statisticsMarkup: this.props.statisticsMarkup,
-  }
-
-  handleCounter = () => {
+  handleCounter = (event) => {
+    const name = event.currentTarget.name;
     this.setState(prevState => ({
-      good: prevState.good + 1,
+      [name]: prevState[name] + 1 
     }));
+
     this.showStatistics();
-    this.handleTotalFeedback();
-    this.handlePositiveFeedbackPercentage();
   }
 
-  handleTotalFeedback = () => {
-    this.setState(prevState => ({
-      total: prevState.good + prevState.neutral + prevState.bad,
-    }));
-  }
+  handleTotalFeedback = () =>
+    this.state.good + this.state.neutral + this.state.bad;
 
-  handlePositiveFeedbackPercentage = () => {
-    this.setState(prevState => ({
-      positivePercentage: Math.round((prevState.good * 100) / prevState.total),
-    }));
-  }
+  handlePositiveFeedbackPercentage = () => 
+    Math.round((this.state.good * 100) / (this.state.good + this.state.neutral + this.state.bad));
 
   showStatistics = () => {
     this.setState(() => ({
@@ -64,15 +46,24 @@ class App extends Component {
   }
 
   render() {
+    const array = ["good", "neutral", "bad"];
+    const { good, neutral, bad } = this.state;
+
     return (
       <>
         <Section title="Please leave Feedback" children>
-          <FeedbackOptions options={this.state} onLeaveFeedback={this.handleCounter} />
+          <FeedbackOptions options={array} onLeaveFeedback={this.handleCounter} />
         </Section>
         {!this.state.statisticsMarkup && (<Notification message="No feedback given" />)}
         {this.state.statisticsMarkup && (
           <Section title="Statistics" children>
-            <Statistics options={this.state} />
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={this.handleTotalFeedback()}
+              positivePercentage={this.handlePositiveFeedbackPercentage()}
+            />
           </Section>)}
       </>
     )
