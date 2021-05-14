@@ -1,8 +1,8 @@
 import React from 'react';
-import Section from './SectionTitle';
-import FeedbackOptions from './FeedbackOptions';
-import Notification from './Notofication';
-import Statistics from './Statistics';
+import Section from './SectionTitle/SectionTitle';
+import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
+import Notification from './Notofication/Notofication';
+import Statistics from './Statistics/Statistics';
 
 
 const { Component } = require("react");
